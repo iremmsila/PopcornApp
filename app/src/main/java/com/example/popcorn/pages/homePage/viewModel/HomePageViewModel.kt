@@ -40,6 +40,9 @@ class HomePageViewModel : ViewModel() {
 
     private val apiKey = "8c751fd9653cd578e62a1a4fabd9acb2"
 
+
+
+
     // Çevrimdışı kontrol bayrağı
     var isOfflineMode: Boolean = false
 
@@ -150,10 +153,15 @@ class HomePageViewModel : ViewModel() {
                     _localGenres.value = genreListCopy // Emit to StateFlow
                 }
             } finally {
-                realmDb.close()
+                //realmDb.close()
             }
         }
     }
+
+    fun getGenreById(genreId: Int): GenreEntity? {
+        return localGenres.value.find { it.genreId == genreId }
+    }
+
 
 
 

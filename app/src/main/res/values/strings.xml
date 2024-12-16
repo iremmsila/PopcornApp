@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Popcorn+</string>
     <string name="first_page">first page</string>
+    <string name="main_screen">main_screen</string>
+    <string name="splash_screen">splash_screen</string>
+    <string name="language">"Language: "</string>
+    <string name="release_date">"Release Date: "</string>
+    <string name="votes">" Votes"</string>
+    <string name="overview">Overview</string>
 </resources>

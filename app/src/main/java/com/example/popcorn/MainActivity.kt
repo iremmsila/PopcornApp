@@ -5,6 +5,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.R
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,13 +24,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.popcorn.api.response.Movie
+import com.example.popcorn.pages.MoviesPage.GenreMoviesScreen
+import com.example.popcorn.pages.detailsPage.view.DetailsScreen
 import com.example.popcorn.pages.homePage.items.MovieItem
 import com.example.popcorn.pages.homePage.view.MovieScreen
 
 import com.example.popcorn.pages.homePage.viewModel.HomePageViewModel
+import com.example.popcorn.pages.splashPage.view.SplashScreen
+import com.example.popcorn.pages.splashPage.viewModel.SplashViewModel
+import com.example.popcorn.realm.entity.MovieEntity
 import com.example.popcorn.ui.theme.PopcornTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,6 +51,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             PopcornTheme {
                 val navController = rememberNavController()
+                val movie = MovieEntity()
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     //backgroundColor = MaterialTheme.colorScheme.background, // veya tercihinize göre başka bir renk
@@ -46,10 +59,26 @@ class MainActivity : ComponentActivity() {
                         Box(modifier = Modifier.padding(innerPadding)) {
                             NavHost(
                                 navController = navController,
-                                startDestination = "movie_screen"
+                                startDestination = "splash_screen"
                             ) {
-                                composable("movie_screen") {
+                                composable("splash_screen") {
+                                    SplashScreen(navController = navController)
+                                }
+                                composable("main_screen") {
                                     MovieScreen(navHostController = navController)
+                                }
+                                composable("genre_movies/{genreId}") { backStackEntry ->
+                                    val genreId = backStackEntry.arguments?.getString("genreId")?.toIntOrNull() ?: 0
+                                    GenreMoviesScreen(genreId = genreId, navHostController = navController)
+                                }
+                                composable(
+                                    route = "movie_detail/{movieId}",
+                                    enterTransition = { slideInHorizontally() + fadeIn() },
+                                    exitTransition = { slideOutHorizontally() + fadeOut() },
+                                    arguments = listOf(navArgument("movieId") { type = NavType.IntType })
+                                ) { backStackEntry ->
+                                    val movieId = backStackEntry.arguments?.getInt("movieId")
+                                    DetailsScreen( movieId = movieId, navHostController = navController)
                                 }
                             }
                         }

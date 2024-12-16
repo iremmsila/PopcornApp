@@ -38,110 +38,6 @@ import coil.size.Size
 import com.example.popcorn.api.TmdbApi
 import com.example.popcorn.api.response.Movie
 import com.example.popcorn.realm.entity.MovieEntity
-import com.example.popcorn.util.getAverageColor
-
-
-//
-//@Composable
-//fun MovieItem(
-//    movie: Movie,
-//    navHostController: NavHostController
-//) {
-//    val imageState = rememberAsyncImagePainter(
-//        model = ImageRequest.Builder(LocalContext.current)
-//            .data(TmdbApi.IMAGE_BASE_URL + movie.backdrop_path)
-//            .size(Size.ORIGINAL)
-//            .build()
-//    ).state
-//
-//    val defaultColor = MaterialTheme.colorScheme.secondaryContainer
-//    var dominantColor by remember {
-//        mutableStateOf(defaultColor)
-//    }
-//
-//    Column(
-//        modifier = Modifier
-//            .wrapContentHeight()
-//            .width(180.dp)
-//            .padding(8.dp)
-//            .clip(RoundedCornerShape(28.dp))
-////            .background(
-////                Brush.verticalGradient(
-////                    colors = listOf(
-////                        MaterialTheme.colorScheme.secondaryContainer,
-////                        dominantColor
-////                    )
-////                )
-////            )
-//            .clickable {
-//                //  navHostController.navigate(Screen.Details.rout + "/${movie.id}")
-//            }
-//    ) {
-//        if (imageState is AsyncImagePainter.State.Error) {
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(8.dp)
-//                    .height(200.dp)
-//                    .clip(RoundedCornerShape(22.dp)),
-//                //     .background(MaterialTheme.colorScheme.primaryContainer),
-//                contentAlignment = Alignment.Center
-//            ) {
-//                Icon(
-//                    modifier = Modifier.size(70.dp),
-//                    imageVector = Icons.Rounded.ImageNotSupported,
-//                    contentDescription = movie.title
-//                )
-//            }
-//        }
-//
-//        if (imageState is AsyncImagePainter.State.Success) {
-//            dominantColor = getAverageColor(
-//                imageBitmap = imageState.result.drawable.toBitmap().asImageBitmap()
-//            )
-//
-//            Image(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(8.dp)
-//                    .height(200.dp)
-//                    .clip(RoundedCornerShape(22.dp)),
-//                painter = imageState.painter,
-//                contentDescription = movie.title,
-//                contentScale = ContentScale.Crop
-//            )
-//        }
-//
-////        Spacer(modifier = Modifier.height(6.dp))
-////
-////        Text(
-////            modifier = Modifier.padding(start = 16.dp, end = 8.dp),
-////            text = movie.title,
-////            color = Color.White,
-////            fontSize = 15.sp,
-////            maxLines = 1
-////        )
-////
-////        Row(
-////            modifier = Modifier
-////                .fillMaxWidth()
-////                .padding(start = 10.dp, bottom = 8.dp, top = 2.dp)
-////        ) {
-////            RatingBar(
-////                starsModifier = Modifier.size(18.dp),
-////                rating = movie.vote_average / 2
-////            )
-////
-////            Text(
-////                modifier = Modifier.padding(start = 4.dp),
-////                text = movie.vote_average.toString().take(3),
-////                color = Color.LightGray,
-////                fontSize = 14.sp,
-////                maxLines = 1,
-////            )
-////        }
-//    }
-//}
 
 
 @Composable
@@ -161,8 +57,8 @@ fun MovieItem(
             .padding(8.dp)
             .clip(RoundedCornerShape(28.dp))
             .clickable {
-                navHostController.navigate("details/${movie.movieId}")
-            }
+                navHostController.navigate("movie_detail/${movie.movieId}")
+            },
     ) {
         if (imagePainter.state is AsyncImagePainter.State.Error) {
             Text(
@@ -181,11 +77,11 @@ fun MovieItem(
             )
         }
 
-        // Filmin başlığı ve diğer bilgilerini göstermek için
-        Text(
-            text = movie.title ?: "Unknown",
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(top = 8.dp)
-        )
+//        // Filmin başlığı ve diğer bilgilerini göstermek için
+//        Text(
+//            text = movie.title ?: "Unknown",
+//            style = MaterialTheme.typography.titleMedium,
+//            modifier = Modifier.padding(top = 8.dp)
+//        )
     }
 }
