@@ -1,4 +1,4 @@
-package com.example.popcorn.pages.MoviesPage
+package com.example.popcorn.pages.moviesPage
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

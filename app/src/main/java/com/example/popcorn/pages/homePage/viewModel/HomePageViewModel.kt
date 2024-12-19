@@ -63,7 +63,7 @@ class HomePageViewModel : ViewModel() {
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
-               // realm.close() // Ensure Realm is closed on the correct thread
+                // realm.close() // Ensure Realm is closed on the correct thread
             }
         }
     }

@@ -95,23 +95,29 @@ fun DetailsScreen(
                         contentScale = ContentScale.Crop
                     )
                 }
+            }
 
-                // Poster Image Overlay
+            Spacer(modifier = Modifier.height(16.dp))
+
+// Poster and Movie Info
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
+            ) {
+                // Poster Image
                 Image(
                     modifier = Modifier
-                        .size(160.dp, 240.dp)
-                        .align(Alignment.BottomStart)
-                        .offset(x = 16.dp, y = 180.dp)
+                        .size(width = 120.dp, height = 180.dp)
                         .clip(RoundedCornerShape(12.dp)),
                     painter = rememberAsyncImagePainter(TmdbApi.IMAGE_BASE_URL + movieDetails.poster_path),
                     contentDescription = movieDetails.title,
                     contentScale = ContentScale.Crop
                 )
-            }
 
-           // Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.width(16.dp))
 
-            Row(modifier = Modifier.padding(start = 190.dp, end = 16.dp)) {
+                // Movie Info Column
                 Column {
                     Text(
                         text = movieDetails.title ?: "No Title",
@@ -121,10 +127,8 @@ fun DetailsScreen(
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        // RatingBar gösterimi
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        // Rating Bar
                         RatingBar(
                             starsModifier = Modifier.size(18.dp),
                             rating = (movieDetails.vote_average?.div(2) ?: 0.0).toDouble()
@@ -132,15 +136,13 @@ fun DetailsScreen(
 
                         Spacer(modifier = Modifier.width(8.dp))
 
-                        // Rating'i text olarak gösterme
+                        // Rating Text
                         Text(
                             text = String.format("%.1f", (movieDetails.vote_average?.div(2) ?: 0.0)),
                             fontSize = 14.sp,
                             color = MaterialTheme.colorScheme.secondary
                         )
                     }
-
-
 
                     Spacer(modifier = Modifier.height(8.dp))
 
@@ -161,6 +163,7 @@ fun DetailsScreen(
                     )
                 }
             }
+
 
             Spacer(modifier = Modifier.height(48.dp))
 

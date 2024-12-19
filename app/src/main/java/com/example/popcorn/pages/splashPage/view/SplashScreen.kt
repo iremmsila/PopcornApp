@@ -47,7 +47,7 @@ fun SplashScreen(navController: NavController, splashViewModel: SplashViewModel 
     val navigateToMain by splashViewModel.navigateToMain.observeAsState(false)
 
     if (navigateToMain) {
-        navController.navigate(context.getString(R.string.main_screen)) {
+        navController.navigate("login"/*context.getString(R.string.main_screen*/) {
             popUpTo(context.getString(R.string.splash_screen)) { inclusive = true }
         }
     }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "366606790415",
+    "project_id": "popcorn-56a95",
+    "storage_bucket": "popcorn-56a95.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366606790415:android:d567530e4838df11d9987a",
+        "android_client_info": {
+          "package_name": "com.example.popcorn"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZ5gm54SIeBZ6BtuCOYshB2z5E7UpRZ-o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
