@@ -25,7 +25,7 @@ fun AutoScrollingTrendingMoviesPager() {
     val realm = Realm.getDefaultInstance()
     val movies = remember { mutableStateListOf<TrendingMovieEntity>() }
 
-    // Realm'den filmleri çek
+
     LaunchedEffect(Unit) {
         val realmResults = realm.where<TrendingMovieEntity>().findAll()
         movies.addAll(realmResults)
@@ -33,7 +33,7 @@ fun AutoScrollingTrendingMoviesPager() {
 
     val pagerState = rememberPagerState(pageCount = { movies.size })
 
-    // Otomatik geçiş için
+
     LaunchedEffect(Unit) {
         while (true) {
             delay(3000) // 3 saniyede bir geçiş

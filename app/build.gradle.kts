@@ -49,7 +49,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
     packaging {
         resources {
@@ -107,6 +107,23 @@ dependencies {
     // system UI Controller
     implementation(libs.accompanist.systemuicontroller)
 
+    //--
+
+    testImplementation (libs.mockito.core)
+    testImplementation (libs.mockito.kotlin)
+
+    // JUnit
+    testImplementation (libs.junit)
+
+    // Compose için Test Kütüphanesi
+    androidTestImplementation (libs.androidx.ui.test.junit4.v150)
+    debugImplementation (libs.androidx.ui.test.manifest.v150)
+    implementation(kotlin("script-runtime"))
+
+    androidTestImplementation(libs.mockk.android.v1135)
+    testImplementation(libs.mockk)
+
+    testImplementation(libs.kotlin.test)
 }
 
 kapt {

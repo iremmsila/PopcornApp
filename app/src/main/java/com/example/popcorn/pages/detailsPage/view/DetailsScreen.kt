@@ -99,7 +99,7 @@ fun DetailsScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-// Poster and Movie Info
+
             Row(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
@@ -117,7 +117,6 @@ fun DetailsScreen(
 
                 Spacer(modifier = Modifier.width(16.dp))
 
-                // Movie Info Column
                 Column {
                     Text(
                         text = movieDetails.title ?: "No Title",
@@ -128,7 +127,6 @@ fun DetailsScreen(
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        // Rating Bar
                         RatingBar(
                             starsModifier = Modifier.size(18.dp),
                             rating = (movieDetails.vote_average?.div(2) ?: 0.0).toDouble()

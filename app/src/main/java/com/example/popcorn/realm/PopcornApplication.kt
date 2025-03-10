@@ -19,7 +19,7 @@ class PopcornApplication : Application() {
     fun initiateRealm(){
         Realm.init(this)
         val config = RealmConfiguration.Builder()
-            .name("Apppopcorn-db.realm")
+            .name("popcorn-db.realm")
             .deleteRealmIfMigrationNeeded()
             .schemaVersion(1) // Sürümü artırdım
             .build()

@@ -3,20 +3,30 @@ accompanistSystemuicontroller = "0.34.0"
 agp = "8.6.0"
 coilCompose = "2.6.0"
 converterGson = "2.11.0"
-gradle = "8.1.4"
+gradle = "8.6.0"
 hiltAndroid = "2.52"
-kotlin = "1.9.0"
+kotlin = "1.9.25"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+kotlinTest = "1.9.0"
 kotlinxCoroutinesCore = "1.9.0"
+kotlinxCoroutinesTest = "1.7.3"
 libraryBase = "3.0.0"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
 composeBom = "2024.04.01"
 loggingInterceptor = "4.10.0"
 materialIconsExtended = "1.7.5"
+mockitoCore = "5.12.0"
+mockitoCoreVersion = "5.5.0"
+mockitoKotlin = "5.4.0"
+mockitoKotlinVersion = "5.1.0"
+mockk = "1.13.8"
+mockkAndroid = "1.13.8"
+mockkAndroidVersion = "1.13.5"
+mockkVersion = "1.13.5"
 navigationCompose = "2.8.4"
 okhttp = "4.12.0"
 realmGradlePlugin = "10.18.0"
@@ -28,12 +38,18 @@ roomKtx = "2.6.1"
 firebaseCrashlyticsBuildtools = "3.0.2"
 googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.1.0"
+uiTestJunit4 = "1.7.6"
+uiTestJunit4Version = "1.5.0"
+uiTestManifest = "1.7.6"
+uiTestManifestVersion = "1.5.0"
 
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-ui-test-junit4-v150 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "uiTestJunit4Version" }
+androidx-ui-test-manifest-v150 = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "uiTestManifestVersion" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
@@ -55,9 +71,19 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin" }
 kotlin-library-base = { module = "io.realm.kotlin:library-base" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlinTest" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 library-base = { module = "io.realm.kotlin:library-base", version.ref = "libraryBase" }
 logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
+mockito-core-v550 = { module = "org.mockito:mockito-core", version.ref = "mockitoCoreVersion" }
+mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
+mockito-kotlin-v510 = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlinVersion" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockkAndroid" }
+mockk-android-v1135 = { module = "io.mockk:mockk-android", version.ref = "mockkAndroidVersion" }
+mockk-v1135 = { module = "io.mockk:mockk", version.ref = "mockkVersion" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 realm-gradle-plugin = { module = "io.realm:realm-gradle-plugin", version.ref = "realmGradlePlugin" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
@@ -67,6 +93,8 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "uiTestJunit4" }
+ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "uiTestManifest" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

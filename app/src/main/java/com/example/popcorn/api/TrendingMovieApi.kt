@@ -7,7 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface TrendingMovieApi {
-    @GET("trending/movie/day") // Günlük trend filmler
+    @GET("trending/movie/day")
     suspend fun getTrendingMovies(
         @Query("api_key") apiKey: String
     ): TrendingMoviesResponse

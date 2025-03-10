@@ -42,7 +42,7 @@ import com.example.popcorn.realm.entity.MovieEntity
 
 @Composable
 fun MovieItem(
-    movie: MovieEntity, // Veritabanından alınan MovieEntity
+    movie: MovieEntity,
     navHostController: NavHostController
 ) {
     val imagePainter = rememberAsyncImagePainter(

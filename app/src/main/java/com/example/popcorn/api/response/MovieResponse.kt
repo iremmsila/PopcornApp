@@ -18,5 +18,5 @@ data class Movie(
     val release_date: String,
     val video: Boolean,
     val vote_count: Int,
-    var updateTimestamp: Long = 0 // Güncelleme zamanı
+    var updateTimestamp: Long = 0
 )

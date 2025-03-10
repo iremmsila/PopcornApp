@@ -8,21 +8,13 @@ import com.example.popcorn.api.retrofit.RetrofitInstance
 import com.example.popcorn.realm.entity.FavoriteListEntity
 import com.example.popcorn.realm.entity.GenreEntity
 import com.example.popcorn.realm.entity.MovieEntity
-import com.example.popcorn.realm.entity.PersonDetailEntity
 import io.realm.Realm
-import io.realm.RealmList
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
-import androidx.lifecycle.viewModelScope
-import com.example.popcorn.api.TmdbApi
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class HomePageViewModel : ViewModel() {
 
@@ -32,18 +24,11 @@ class HomePageViewModel : ViewModel() {
     private val _genres = MutableStateFlow<List<Genre>>(emptyList())
     val genres: StateFlow<List<Genre>> get() = _genres
 
-    private val _moviesByGenre = MutableStateFlow<Map<Int, List<Movie>>>(emptyMap())
-    val moviesByGenre: StateFlow<Map<Int, List<Movie>>> get() = _moviesByGenre
-
     private val _localGenres = MutableStateFlow<List<GenreEntity>>(emptyList())
     val localGenres: StateFlow<List<GenreEntity>> get() = _localGenres
 
-    private val apiKey = "8c751fd9653cd578e62a1a4fabd9acb2"
+    private val apiKey = "your-api-key"
 
-
-
-
-    // Çevrimdışı kontrol bayrağı
     var isOfflineMode: Boolean = false
 
     init {
@@ -52,40 +37,38 @@ class HomePageViewModel : ViewModel() {
 
     fun fetchMoviesFromDatabase() {
         viewModelScope.launch(Dispatchers.IO) {
-            val realm = Realm.getDefaultInstance()
+            val realm = RealmManager.getRealmInstance()
             try {
                 val movies = realm.where(MovieEntity::class.java).findAll()
-                val movieListCopy = realm.copyFromRealm(movies) // Copy Realm objects to avoid thread issues
-                // Return to the main thread to update the UI
+                val movieListCopy = realm.copyFromRealm(movies)
                 withContext(Dispatchers.Main) {
                     _movieList.value = movieListCopy
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
-                // realm.close() // Ensure Realm is closed on the correct thread
+                RealmManager.closeRealm()
             }
         }
     }
 
+
+
     fun fetchGenres() {
         viewModelScope.launch {
             try {
-                if (!isOfflineMode) { // Çevrimdışı modda API çağrılarını atla
+                if (!isOfflineMode) {
                     val genresResponse = RetrofitInstance.api.getGenres(apiKey)
                     if (genresResponse.isSuccessful) {
                         genresResponse.body()?.let {
                             _genres.value = it.genres
                             fetchMoviesByGenre()
                         }
-                    } else {
-                        println("Failed to fetch genres: ${genresResponse.errorBody()?.string()}")
                     }
                 }
-                getGenresFromRealm() // Her durumda veritabanındaki türleri al
+                getGenresFromRealm()
             } catch (e: Exception) {
                 e.printStackTrace()
-                println("Error fetching genres: ${e.localizedMessage}")
             }
         }
     }
@@ -93,10 +76,11 @@ class HomePageViewModel : ViewModel() {
     fun fetchMoviesByGenre() {
         viewModelScope.launch(Dispatchers.IO) {
             val genreList = _genres.value
-            val realmDb = Realm.getDefaultInstance()
+            val realm = RealmManager.getRealmInstance()
 
             try {
                 genreList.forEach { genre ->
+                    
                     val moviesResponse = try {
                         RetrofitInstance.api.getMoviesByGenre(apiKey, genre.id)
                     } catch (e: Exception) {
@@ -106,6 +90,7 @@ class HomePageViewModel : ViewModel() {
 
                     if (moviesResponse?.isSuccessful == true) {
                         moviesResponse.body()?.let { movieResult ->
+                            // API'den gelen verileri Realm formatına dönüştür
                             val movieEntities = movieResult.results.map { movie ->
                                 MovieEntity().apply {
                                     movieId = movie.id
@@ -124,12 +109,20 @@ class HomePageViewModel : ViewModel() {
                                 }
                             }
 
-                            realmDb.executeTransaction { transactionRealm ->
-                                val genreEntity = GenreEntity().apply {
+
+                            realm.executeTransaction { transactionRealm ->
+
+                                val genreEntity = transactionRealm.where(GenreEntity::class.java)
+                                    .equalTo("genreId", genre.id)
+                                    .findFirst() ?: GenreEntity().apply {
                                     genreId = genre.id
                                     name = genre.name
-                                    movieList?.addAll(movieEntities)
                                 }
+
+
+                                genreEntity.movieList?.clear()
+                                genreEntity.movieList?.addAll(movieEntities)
+
                                 transactionRealm.copyToRealmOrUpdate(genreEntity)
                             }
                         }
@@ -138,142 +131,29 @@ class HomePageViewModel : ViewModel() {
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
-                //realmDb.close() // Always close Realm on the same thread
+                RealmManager.closeRealm()
             }
         }
     }
 
     fun getGenresFromRealm() {
         viewModelScope.launch(Dispatchers.IO) {
-            val realmDb = Realm.getDefaultInstance()
+            val realm = RealmManager.getRealmInstance()
             try {
-                val genreList = realmDb.where(GenreEntity::class.java).findAll()
-                val genreListCopy = realmDb.copyFromRealm(genreList)
+                val genreList = realm.where(GenreEntity::class.java).findAll()
+                val genreListCopy = realm.copyFromRealm(genreList)
                 withContext(Dispatchers.Main) {
-                    _localGenres.value = genreListCopy // Emit to StateFlow
+                    _localGenres.value = genreListCopy
                 }
             } finally {
-                //realmDb.close()
+                RealmManager.closeRealm()
             }
         }
     }
+
 
     fun getGenreById(genreId: Int): GenreEntity? {
         return localGenres.value.find { it.genreId == genreId }
     }
 
-
-
-
-
-//    fun fetchMoviesByGenre() {
-//        viewModelScope.launch {
-//            val genreList = _genres.value
-//            val moviesMap = mutableMapOf<Int, List<Movie>>()
-//
-//            genreList.forEach { genre ->
-//                try {
-//                    val moviesResponse = RetrofitInstance.api.getMoviesByGenre(apiKey, genre.id)
-//                    if (moviesResponse.isSuccessful) {
-//                        moviesResponse.body()?.let {
-//                            moviesMap[genre.id] = it.results
-//                        }
-//                    } else {
-//                        println("Failed to fetch movies for genre ${genre.name}: ${moviesResponse.errorBody()?.string()}")
-//                    }
-//                } catch (e: Exception) {
-//                    e.printStackTrace()
-//                    println("Error fetching movies for genre ${genre.name}: ${e.localizedMessage}")
-//                }
-//            }
-//
-//            val genresResponse = RetrofitInstance.api.getGenres(apiKey)
-//            if (genresResponse.isSuccessful) {
-//                genresResponse.body()?.let {
-//                    _genres.value = it.genres
-//                    fetchMoviesByGenre()
-//                }
-//            } else {
-//                println("Failed to fetch genres: ${genresResponse.errorBody()?.string()}")
-//            }
-//
-//            _moviesByGenre.value = moviesMap
-//
-//
-//            CoroutineScope(Dispatchers.IO).launch {
-//
-//                val personalDetail = PersonDetailEntity().apply {
-//                    _id = 1
-//                    name = "t"
-//                    surname = "t"
-//                    mail = "t"
-//                    password = "t"
-//                    favorite = FavoriteListEntity().apply{
-//                        movieId = 1
-//                        title = "t"
-//                        poster_path = "t"
-//                        vote_average = 1.0
-//                        adult = true
-//                        backdrop_path = "t"
-//                        original_language = "t"
-//                        original_title = "t"
-//                        overview = "t"
-//                        popularity = 1.0
-//                        release_date = "t"
-//                        video = true
-//                        vote_count = 1
-//                    }
-//                    favoriteList = RealmList()
-//                }
-//
-//
-//
-//                val movieDetail = GenreEntity().apply {
-//                    genreId =
-//                        name = "ffff"
-//                    movie = MovieEntity().apply{
-//                        movieId = 1
-//                        title = "f"
-//                        poster_path = "f"
-//                        vote_average = 1.0
-//                        adult = true
-//                        backdrop_path = "tf"
-//                        original_language = "tf"
-//                        original_title = "tf"
-//                        overview = "tf"
-//                        popularity = 1.0
-//                        release_date = "tf"
-//                        video = true
-//                        vote_count = 1
-//                    }
-//                    movieList = RealmList()
-//                }
-//
-//                var realmDb = Realm.getDefaultInstance()
-//
-//                realmDb.beginTransaction()
-//
-//                realmDb.copyToRealmOrUpdate(personalDetail)
-//                realmDb.copyToRealmOrUpdate(movieDetail)
-//
-//                realmDb.commitTransaction()
-//
-//                realmDb.close()
-//
-//
-//                //update
-//                realmDb = Realm.getDefaultInstance()
-//
-//                realmDb.executeTransaction {realm ->
-//                    var data = realm.where(PersonDetailEntity::class.java)
-//                        .equalTo("_id", 1L)
-//                        .findFirst()
-//
-//                    data?.name = "kest"
-//                }
-//                realmDb.close()
-//
-//            }
-//        }
-//    }
 }

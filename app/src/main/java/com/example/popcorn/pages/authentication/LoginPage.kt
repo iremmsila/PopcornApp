@@ -1,8 +1,10 @@
 package com.example.popcorn.pages.authentication
 
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,6 +44,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -52,7 +55,6 @@ import com.example.popcorn.R
 import com.example.popcorn.pages.authentication.viewmodel.AuthState
 import com.example.popcorn.pages.authentication.viewmodel.AuthViewModel
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginPage(
@@ -60,11 +62,10 @@ fun LoginPage(
     navController: NavController,
     authViewModel: AuthViewModel
 ) {
-    // Tema renklerini MaterialTheme'den al
+
     val colors = MaterialTheme.colorScheme
     val isDarkTheme = isSystemInDarkTheme()
     val iconRes = if (isDarkTheme) R.mipmap.ic_popcorn_white else R.mipmap.ic_popcorn_black
-
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -73,8 +74,6 @@ fun LoginPage(
 
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
-
-
 
     LaunchedEffect(authState.value) {
         when (authState.value) {
@@ -86,11 +85,11 @@ fun LoginPage(
         }
     }
 
-    // Arayüz
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(colors.background) // Arka plan rengi
+            .background(colors.background)
             .padding(16.dp),
         contentAlignment = Alignment.Center
     ) {
@@ -111,33 +110,31 @@ fun LoginPage(
                     style = TextStyle(
                         fontSize = 48.sp,
                         fontWeight = FontWeight.Bold,
-                        fontFamily = androidx.compose.ui.text.font.FontFamily.Cursive
+                        fontFamily = FontFamily.Cursive
                     )
                 )
             }
 
             Spacer(
-                modifier = Modifier.height(screenHeight * 0.1f) // Ekranın %10'u kadar boşluk
+                modifier = Modifier.height(screenHeight * 0.2f)
             )
 
 
-            // Log In Metni
-            Text(
-                text = "LOG IN",
-                fontSize = 24.sp,
-                fontStyle = FontStyle.Italic,
-                fontWeight = FontWeight.Bold,
-                color = colors.onBackground
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+            Text("LOG IN",
+                fontSize = 45.sp,
+                fontFamily = FontFamily.Cursive,
+                fontWeight = FontWeight.Bold)
 
-            // Email Input
+            Spacer(modifier = Modifier.height(32.dp))
+
+
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
                 label = { Text("E-mail", color = colors.onBackground) },
                 leadingIcon = { Icon(Icons.Default.Email, contentDescription = "Email", tint = colors.primary) },
-                modifier = Modifier.fillMaxWidth(0.8f),
+                modifier = Modifier
+                    .fillMaxWidth(0.8f),
                 shape = MaterialTheme.shapes.large,
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = colors.primary,
@@ -147,14 +144,15 @@ fun LoginPage(
             )
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Password Input
+
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
                 label = { Text("Password", color = colors.onBackground) },
                 leadingIcon = { Icon(Icons.Default.Lock, contentDescription = "Password", tint = colors.primary) },
                 visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth(0.8f),
+                modifier = Modifier
+                    .fillMaxWidth(0.8f),
                 shape = MaterialTheme.shapes.large,
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = colors.primary,
@@ -171,38 +169,42 @@ fun LoginPage(
                     .fillMaxWidth(0.8f)
             )
 
-            // Login Butonu
+            Spacer(modifier = Modifier.height(16.dp))
+
+
             Button(
                 onClick = { authViewModel.login(email, password) },
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
                     .height(48.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = colors.primary, // Buton arka plan rengi
-                    contentColor = colors.onPrimary // Buton içindeki yazı rengi
+                    containerColor = colors.primary,
+                    contentColor = colors.onPrimary
                 ),
                 enabled = authState.value != AuthState.Loading
             ) {
-                Text("Log In", fontSize = 18.sp)
+                Text("Log In",
+                    fontSize = 25.sp,
+                    fontFamily = FontFamily.Cursive,
+                    fontWeight = FontWeight.Bold)
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Sign Up Linki
+
             Row(
-                verticalAlignment = Alignment.CenterVertically, // İçerikleri dikey olarak hizala
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     "Don't have an account?",
                     style = MaterialTheme.typography.bodyMedium,
                     color = colors.onBackground
                 )
-                Spacer(modifier = Modifier.width(4.dp)) // Araya boşluk ekle
+                Spacer(modifier = Modifier.width(4.dp))
                 TextButton(onClick = { navController.navigate("signup") }) {
                     Text("Sign Up", color = colors.secondary)
                 }
             }
-
         }
     }
 }

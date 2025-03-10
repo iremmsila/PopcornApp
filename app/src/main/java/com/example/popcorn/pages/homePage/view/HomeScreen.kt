@@ -41,31 +41,22 @@ import com.example.popcorn.pages.homePage.items.AutoScrollingTrendingMoviesPager
 import com.example.popcorn.pages.homePage.items.MovieItem
 import com.example.popcorn.pages.homePage.viewModel.HomePageViewModel
 import com.example.popcorn.pages.homePage.viewModel.fetchAndSaveTrendingMovies
-import com.example.popcorn.pages.splashPage.viewModel.SplashViewModel
-import com.example.popcorn.realm.entity.toMovieModel
+
 
 @Composable
 fun MovieScreen(viewModel: HomePageViewModel = viewModel(), navHostController: NavHostController) {
-    // Verileri yükleme
+
     LaunchedEffect(Unit) {
-        viewModel.getGenresFromRealm() // Veritabanından türleri al
-        viewModel.fetchMoviesFromDatabase() // Veritabanından filmleri al
+        viewModel.getGenresFromRealm()
+        viewModel.fetchMoviesFromDatabase()
     }
 
-    fetchAndSaveTrendingMovies(apiService = trendingApi, apiKey = "8c751fd9653cd578e62a1a4fabd9acb2")
+    fetchAndSaveTrendingMovies(apiService = trendingApi, apiKey = "your-api-key")
 
-    // Veritabanından gelen türleri dinle
+
     val genres = viewModel.localGenres.collectAsState().value
-    val  splashViewModel: SplashViewModel = viewModel()
     var isExpanded by remember { mutableStateOf(true) }
-    val isSplashScreenVisible by splashViewModel.isSplashScreenVisible.observeAsState(true)
 
-
-    // Eğer türler boşsa
-    if (genres.isEmpty()) {
-       // splashViewModel.OpenSplashScreen()
-    } else {
-        splashViewModel.CloseSplashScreen()
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -131,7 +122,7 @@ fun MovieScreen(viewModel: HomePageViewModel = viewModel(), navHostController: N
         }
 
 
-    }
+  //  }
 }
 
 
