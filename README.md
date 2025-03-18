@@ -22,6 +22,3 @@ o	Bu özellik, kullanıcıların her kategoriye ait film seçeneklerini görmek 
 o	Veritabanı ve API Entegrasyonu: "Daha Fazla" butonuna tıklama işlemi, mevcut veritabanındaki ya da API'deki verilerin yüklenmesine olanak tanıyacak şekilde tasarlandı. Eğer veriler zaten yüklenmişse, mevcut veritabanındaki içerikler çekildi. Eğer veriler güncellenmesi gereken verilerse, API'den çekilmeye devam etti.
 
 ![image](https://github.com/user-attachments/assets/a7fe9861-0c8e-48cd-b30b-21ff3dc6ec6b)
-
-
-
