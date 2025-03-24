@@ -1,3 +1,4 @@
+
 ![image](https://github.com/user-attachments/assets/75bbc9bf-2bb4-487d-972a-8671f2735f85)
 
 projeye başlamadan önce figma ile yol haritası çizilmiş, ekranların kabataslak olarak nasıl görüneceği belirlenmiş ve bu tasarımdan büyük ölçüde sapılmadan uygulama son halini bulmuştur.
